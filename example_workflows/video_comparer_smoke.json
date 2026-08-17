@@ -1,0 +1,124 @@
+{
+  "id": "ba3d67c3-40b1-4d88-8b0a-094d8c9f3771",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "EmptyImage",
+      "pos": [40, 40],
+      "size": [300, 126],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1]}
+      ],
+      "properties": {"Node name for S&R": "EmptyImage"},
+      "widgets_values": [64, 64, 4, 16711680]
+    },
+    {
+      "id": 2,
+      "type": "CreateVideo",
+      "pos": [390, 40],
+      "size": [270, 110],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 1},
+        {"name": "audio", "type": "AUDIO", "shape": 7, "link": null}
+      ],
+      "outputs": [
+        {"name": "VIDEO", "type": "VIDEO", "links": [3]}
+      ],
+      "properties": {"Node name for S&R": "CreateVideo"},
+      "widgets_values": [4, 8]
+    },
+    {
+      "id": 3,
+      "type": "EmptyImage",
+      "pos": [40, 250],
+      "size": [300, 126],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [2]}
+      ],
+      "properties": {"Node name for S&R": "EmptyImage"},
+      "widgets_values": [64, 64, 4, 255]
+    },
+    {
+      "id": 4,
+      "type": "CreateVideo",
+      "pos": [390, 250],
+      "size": [270, 110],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 2},
+        {"name": "audio", "type": "AUDIO", "shape": 7, "link": null}
+      ],
+      "outputs": [
+        {"name": "VIDEO", "type": "VIDEO", "links": [4]}
+      ],
+      "properties": {"Node name for S&R": "CreateVideo"},
+      "widgets_values": [4, 8]
+    },
+    {
+      "id": 5,
+      "type": "IndiVideoComparer",
+      "pos": [730, 40],
+      "size": [520, 480],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "video_a", "type": "VIDEO", "link": 3},
+        {"name": "video_b", "type": "VIDEO", "link": 4}
+      ],
+      "outputs": [
+        {"name": "recorded_video", "type": "VIDEO", "links": [5]}
+      ],
+      "properties": {"Node name for S&R": "IndiVideoComparer"},
+      "widgets_values": ["Red A", "Blue B", true, true, true, 0.5, 80, ""]
+    },
+    {
+      "id": 6,
+      "type": "SaveVideo",
+      "pos": [1300, 40],
+      "size": [420, 126],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "video", "type": "VIDEO", "link": 5}
+      ],
+      "outputs": [
+        {"name": "video", "type": "VIDEO", "links": null}
+      ],
+      "properties": {},
+      "widgets_values": ["video/VideoComparerRecording", "auto", "auto"]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "IMAGE"],
+    [2, 3, 0, 4, 0, "IMAGE"],
+    [3, 2, 0, 5, 0, "VIDEO"],
+    [4, 4, 0, 5, 1, "VIDEO"],
+    [5, 5, 0, 6, 0, "VIDEO"]
+  ],
+  "groups": [],
+  "definitions": {"subgraphs": []},
+  "config": {},
+  "extra": {
+    "frontendVersion": "1.47.11",
+    "ds": {"scale": 0.9, "offset": [20, 20]}
+  },
+  "version": 0.4
+}

@@ -1,0 +1,16 @@
+[project]
+name = "comfyui-video-comparer"
+version = "0.1.0"
+description = "Synchronized in-node swipe comparison for two ComfyUI VIDEO inputs"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer"
+Issues = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer/issues"
+
+[tool.comfy]
+PublisherId = "AIEGOBOT"
+DisplayName = "ComfyUI Video Comparer"
+requires-comfyui = ">=0.33.1"

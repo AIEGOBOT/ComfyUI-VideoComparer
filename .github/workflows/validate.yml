@@ -1,0 +1,50 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate Python syntax
+        run: python -m py_compile __init__.py nodes.py
+
+      - name: Validate frontend JavaScript syntax
+        run: node --check web/video_comparer_v7.js
+
+      - name: Validate metadata and example workflow
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import tomllib
+
+          root = pathlib.Path(".")
+          metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+          assert metadata["project"]["name"] == "comfyui-video-comparer"
+          assert metadata["project"]["license"]["file"] == "LICENSE"
+
+          workflow = json.loads(
+              (root / "example_workflows" / "video_comparer_smoke.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          node_types = {node["type"] for node in workflow["nodes"]}
+          assert {"IndiVideoComparer", "SaveVideo"} <= node_types
+          print("metadata-and-workflow-ok")
+          PY
