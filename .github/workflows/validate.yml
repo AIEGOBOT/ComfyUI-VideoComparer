@@ -32,12 +32,11 @@ jobs:
           python - <<'PY'
           import json
           import pathlib
-          import tomllib
 
           root = pathlib.Path(".")
-          metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
-          assert metadata["project"]["name"] == "comfyui-video-comparer"
-          assert metadata["project"]["license"]["file"] == "LICENSE"
+          metadata = (root / "pyproject.toml").read_text(encoding="utf-8")
+          assert 'name = "comfyui-video-comparer"' in metadata
+          assert 'license = { file = "LICENSE" }' in metadata
 
           workflow = json.loads(
               (root / "example_workflows" / "video_comparer_smoke.json").read_text(
