@@ -1,0 +1,13 @@
+# Development and CI files
+.github/
+tests/
+
+# Documentation media is hosted by GitHub and is not needed at runtime
+docs/assets/
+
+# Registry artwork is referenced through raw GitHub URLs
+assets/
+
+# Local caches and bytecode
+__pycache__/
+*.py[cod]

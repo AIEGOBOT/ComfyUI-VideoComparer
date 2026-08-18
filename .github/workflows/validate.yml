@@ -38,11 +38,15 @@ jobs:
           python - <<'PY'
           import json
           import pathlib
+          import struct
 
           root = pathlib.Path(".")
           metadata = (root / "pyproject.toml").read_text(encoding="utf-8")
-          assert 'name = "comfyui-video-comparer"' in metadata
+          assert 'name = "video-comparer"' in metadata
           assert 'license = { file = "LICENSE" }' in metadata
+          assert 'PublisherId = "aiegobot"' in metadata
+          assert 'assets/registry-icon.png' in metadata
+          assert 'assets/registry-banner.png' in metadata
 
           workflows = [
               root / "example_workflows" / "video_comparer_smoke.json",
@@ -64,5 +68,23 @@ jobs:
           assert demo.is_file() and 0 < demo.stat().st_size < 20 * 1024 * 1024
           assert poster.is_file() and poster.stat().st_size > 0
           assert workflow_screenshot.is_file() and 0 < workflow_screenshot.stat().st_size < 10 * 1024 * 1024
+
+          def png_size(path):
+              with path.open("rb") as handle:
+                  assert handle.read(8) == b"\x89PNG\r\n\x1a\n"
+                  length = struct.unpack(">I", handle.read(4))[0]
+                  assert handle.read(4) == b"IHDR" and length == 13
+                  return struct.unpack(">II", handle.read(8))
+
+          assert png_size(root / "assets" / "registry-icon.png") == (400, 400)
+          assert png_size(root / "assets" / "registry-banner.png") == (1400, 600)
+
+          comfyignore = (root / ".comfyignore").read_text(encoding="utf-8")
+          for excluded in (".github/", "tests/", "docs/assets/", "assets/"):
+              assert excluded in comfyignore
+
+          publish_workflow = (root / ".github" / "workflows" / "publish_action.yml").read_text(encoding="utf-8")
+          assert "workflow_dispatch:" in publish_workflow
+          assert "REGISTRY_ACCESS_TOKEN" in publish_workflow
           print("metadata-and-workflow-ok")
           PY

@@ -1,16 +1,22 @@
 [project]
-name = "comfyui-video-comparer"
+name = "video-comparer"
 version = "0.1.0"
 description = "Synchronized in-node swipe comparison for two ComfyUI VIDEO inputs"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
+classifiers = [
+    "Operating System :: OS Independent",
+]
 
 [project.urls]
 Repository = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer"
 Issues = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer/issues"
+Documentation = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer/blob/main/docs/IndiVideoComparer.md"
 
 [tool.comfy]
-PublisherId = "AIEGOBOT"
+PublisherId = "aiegobot"
 DisplayName = "ComfyUI Video Comparer"
+Icon = "https://raw.githubusercontent.com/AIEGOBOT/ComfyUI-VideoComparer/main/assets/registry-icon.png"
+Banner = "https://raw.githubusercontent.com/AIEGOBOT/ComfyUI-VideoComparer/main/assets/registry-banner.png"
 requires-comfyui = ">=0.33.1"
