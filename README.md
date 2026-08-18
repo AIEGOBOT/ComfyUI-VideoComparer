@@ -1,5 +1,7 @@
 # ComfyUI Video Comparer
 
+<img src="assets/registry-banner.png" width="100%" alt="ComfyUI Video Comparer banner">
+
 [English](#english) · [한국어](#한국어)
 
 <img src="docs/assets/video-comparer-workflow.png" width="1200" alt="Real ComfyUI workflow using Video Comparer">
