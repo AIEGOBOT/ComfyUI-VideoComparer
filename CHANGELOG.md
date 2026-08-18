@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- A second real-world swipe recording and poster in the README examples.
+
 ## 0.1.0 - 2026-08-18
 
 ### Added
