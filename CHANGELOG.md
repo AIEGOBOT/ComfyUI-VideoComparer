@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- A second real-world swipe recording and poster in the README examples.
+- A second real-world swipe recording and animated GIF previews in the README examples.
 
 ## 0.1.0 - 2026-08-18
 
