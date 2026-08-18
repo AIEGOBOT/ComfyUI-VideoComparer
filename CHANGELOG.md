@@ -1,0 +1,22 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## Unreleased
+
+### Added
+
+- Current ComfyUI Manager and manual installation guides in English and Korean.
+- Public issue forms, pull request checklist, contribution guide, and security policy.
+- Expanded troubleshooting, update, and uninstall instructions.
+
+## 0.1.0 - Pending Registry publication
+
+### Added
+
+- Synchronized in-node swipe comparison for two core ComfyUI `VIDEO` inputs.
+- Play, pause, seek, loop, audio mute, 50% reset, and drift correction controls.
+- Browser recording with upload and core `Save Video` integration.
+- Portable smoke workflow and practical load/record/save example workflow.
+- Bilingual documentation, real workflow screenshot, and recorded demonstration.
+- Two-minute and 512 MiB recording limits plus bounded temporary preview retention.

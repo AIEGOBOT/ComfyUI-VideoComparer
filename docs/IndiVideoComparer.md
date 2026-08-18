@@ -5,6 +5,9 @@
 - Node ID: `IndiVideoComparer`
 - Category: `video/preview`
 
+[Installation](INSTALLATION.md) · [Troubleshooting](TROUBLESHOOTING.md) ·
+[Example workflows](../example_workflows/README.md)
+
 ## English
 
 ### Purpose
