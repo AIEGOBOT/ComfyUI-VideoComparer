@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - A second real-world swipe recording and animated GIF previews in the README examples.
 
+### Changed
+
+- Clarified the main use cases for upscaling, reference-video, and settings comparisons.
+
 ## 0.1.0 - 2026-08-18
 
 ### Added
