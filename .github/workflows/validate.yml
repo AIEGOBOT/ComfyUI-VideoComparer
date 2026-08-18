@@ -90,15 +90,22 @@ jobs:
               assert "/home/" not in text, path
 
           demo = root / "docs" / "assets" / "video-comparer-demo.mp4"
+          demo_gif = root / "docs" / "assets" / "video-comparer-demo.gif"
           poster = root / "docs" / "assets" / "video-comparer-demo-poster.jpg"
           real_world_demo = root / "docs" / "assets" / "video-comparer-real-world-demo.mp4"
+          real_world_gif = root / "docs" / "assets" / "video-comparer-real-world-demo.gif"
           real_world_poster = root / "docs" / "assets" / "video-comparer-real-world-demo-poster.jpg"
           workflow_screenshot = root / "docs" / "assets" / "video-comparer-workflow.png"
           assert demo.is_file() and 0 < demo.stat().st_size < 20 * 1024 * 1024
+          assert demo_gif.is_file() and 0 < demo_gif.stat().st_size < 10 * 1024 * 1024
           assert poster.is_file() and poster.stat().st_size > 0
           assert real_world_demo.is_file() and 0 < real_world_demo.stat().st_size < 20 * 1024 * 1024
+          assert real_world_gif.is_file() and 0 < real_world_gif.stat().st_size < 10 * 1024 * 1024
           assert real_world_poster.is_file() and real_world_poster.stat().st_size > 0
           assert workflow_screenshot.is_file() and 0 < workflow_screenshot.stat().st_size < 10 * 1024 * 1024
+
+          for gif in (demo_gif, real_world_gif):
+              assert gif.read_bytes()[:6] in (b"GIF87a", b"GIF89a"), gif
 
           def png_size(path):
               with path.open("rb") as handle:
