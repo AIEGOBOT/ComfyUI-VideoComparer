@@ -2,6 +2,12 @@
 
 [English](#english) · [한국어](#한국어)
 
+<img src="docs/assets/video-comparer-workflow.png" width="1200" alt="Real ComfyUI workflow using Video Comparer">
+
+Real ComfyUI workflow: load videos A/B, compare them with the swipe preview, record the interaction, and save the result.
+
+실제 ComfyUI 사용 화면: A/B 영상을 불러와 스와이프로 비교하고, 조작 화면을 녹화해 저장합니다.
+
 <a href="docs/assets/video-comparer-demo.mp4">
   <img src="docs/assets/video-comparer-demo-poster.jpg" width="420" alt="Video Comparer swipe recording example">
 </a>
@@ -65,6 +71,7 @@ The shared comparison duration is the shorter input duration. The browser record
 
 - [`video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json): portable red/blue test that needs no input files or model.
 - [`video_comparer_load_and_record.json`](example_workflows/video_comparer_load_and_record.json): practical two-video load, compare, record, and save layout.
+- [`video-comparer-workflow.png`](docs/assets/video-comparer-workflow.png): real ComfyUI workflow screenshot shown above.
 - [`video-comparer-demo.mp4`](docs/assets/video-comparer-demo.mp4): real swipe recording shown above.
 - [Full node reference](docs/IndiVideoComparer.md)
 
@@ -144,6 +151,7 @@ git clone https://github.com/AIEGOBOT/ComfyUI-VideoComparer.git
 
 - [`video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json): 입력 파일과 모델 없이 실행되는 빨강/파랑 테스트.
 - [`video_comparer_load_and_record.json`](example_workflows/video_comparer_load_and_record.json): 영상 두 개를 불러와 비교·녹화·저장하는 실사용 구성.
+- [`video-comparer-workflow.png`](docs/assets/video-comparer-workflow.png): 위에 표시한 실제 ComfyUI 워크플로우 화면.
 - [`video-comparer-demo.mp4`](docs/assets/video-comparer-demo.mp4): 위 대표 이미지에 사용한 실제 스와이프 녹화 영상.
 - [상세 노드 설명](docs/IndiVideoComparer.md)
 
