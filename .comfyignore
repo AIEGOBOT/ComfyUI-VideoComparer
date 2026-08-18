@@ -1,6 +1,10 @@
 # Development and CI files
 .github/
 tests/
+AGENTS.md
+ARCHITECTURE.md
+CONTRIBUTING.md
+SECURITY.md
 
 # Documentation media is hosted by GitHub and is not needed at runtime
 docs/assets/

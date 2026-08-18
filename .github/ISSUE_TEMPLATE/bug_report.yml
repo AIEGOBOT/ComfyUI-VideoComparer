@@ -1,0 +1,77 @@
+name: Bug report / 버그 신고
+description: Report a reproducible problem / 재현 가능한 문제를 알려주세요
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. Please check the troubleshooting guide first and remove private data from logs or workflows.
+
+        신고해 주셔서 감사합니다. 먼저 문제 해결 문서를 확인하고 로그와 워크플로우에서 개인정보를 제거해 주세요.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting / 작성 전 확인
+      options:
+        - label: I searched existing issues and read the troubleshooting guide. / 기존 이슈와 문제 해결 문서를 확인했습니다.
+          required: true
+        - label: This is not a security vulnerability. / 보안 취약점 신고가 아닙니다.
+          required: true
+
+  - type: input
+    id: comfyui_version
+    attributes:
+      label: ComfyUI and frontend versions / ComfyUI와 프론트엔드 버전
+      placeholder: "ComfyUI 0.33.1, frontend 1.48.7"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / 실행 환경
+      description: Operating system, Python version, browser, and installation method / 운영체제, Python, 브라우저, 설치 방법
+      placeholder: "Windows 11, Python 3.12, Chrome 140, ComfyUI Manager"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem / 문제 내용
+      description: What happened, and what did you expect? / 실제 결과와 기대한 결과를 적어주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce / 재현 순서
+      placeholder: |
+        1. Connect ...
+        2. Queue ...
+        3. Press ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs / 관련 로그
+      description: Paste the first relevant traceback or browser-console error. Remove private paths and data. / 첫 관련 오류를 붙여넣고 개인 경로와 정보를 제거하세요.
+      render: shell
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Minimal workflow / 최소 워크플로우
+      description: Attach a safe minimal JSON or drag it here. Do not include personal media or secrets. / 안전한 최소 JSON을 첨부하세요. 개인 미디어와 비밀 정보는 넣지 마세요.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context / 추가 정보
+      description: Screenshots or anything else that may help / 스크린샷 등 도움이 될 정보

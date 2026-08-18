@@ -33,7 +33,7 @@ jobs:
       - name: Validate frontend JavaScript syntax
         run: node --check web/video_comparer_v7.js
 
-      - name: Validate metadata and example workflow
+      - name: Validate metadata, public docs, and examples
         run: |
           python - <<'PY'
           import json
@@ -61,6 +61,33 @@ jobs:
 
           readme = (root / "README.md").read_text(encoding="utf-8")
           assert "## English" in readme and "## 한국어" in readme
+          assert "ComfyUI Manager — recommended" in readme
+          assert "Install via Git URL" in readme
+          assert "git clone https://github.com/AIEGOBOT/ComfyUI-VideoComparer.git" in readme
+
+          required_public_files = [
+              "README.md",
+              "LICENSE",
+              "CHANGELOG.md",
+              "CONTRIBUTING.md",
+              "SECURITY.md",
+              "docs/INSTALLATION.md",
+              "docs/TROUBLESHOOTING.md",
+              "docs/IndiVideoComparer.md",
+              ".github/ISSUE_TEMPLATE/bug_report.yml",
+              ".github/ISSUE_TEMPLATE/feature_request.yml",
+              ".github/ISSUE_TEMPLATE/config.yml",
+              ".github/PULL_REQUEST_TEMPLATE.md",
+          ]
+          for relative in required_public_files:
+              path = root / relative
+              assert path.is_file() and path.stat().st_size > 0, relative
+
+          for path in list(root.rglob("*.md")) + workflows:
+              text = path.read_text(encoding="utf-8")
+              assert "D:\\" not in text, path
+              assert "C:\\Users\\" not in text, path
+              assert "/home/" not in text, path
 
           demo = root / "docs" / "assets" / "video-comparer-demo.mp4"
           poster = root / "docs" / "assets" / "video-comparer-demo-poster.jpg"
@@ -80,7 +107,15 @@ jobs:
           assert png_size(root / "assets" / "registry-banner.png") == (1400, 600)
 
           comfyignore = (root / ".comfyignore").read_text(encoding="utf-8")
-          for excluded in (".github/", "tests/", "docs/assets/", "assets/"):
+          for excluded in (
+              ".github/",
+              "tests/",
+              "docs/assets/",
+              "assets/",
+              "AGENTS.md",
+              "CONTRIBUTING.md",
+              "SECURITY.md",
+          ):
               assert excluded in comfyignore
 
           publish_workflow = (root / ".github" / "workflows" / "publish_action.yml").read_text(encoding="utf-8")
