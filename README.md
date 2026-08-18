@@ -15,6 +15,12 @@ and send the result directly to the core `Save Video` node.
 ComfyUI 영상 두 개를 동기화된 스와이프로 비교하고, 조작 화면을 녹화해 코어
 `Save Video` 노드로 바로 전달합니다.
 
+Use it to inspect video upscaling quality, compare a generated or processed result
+against a reference video, and A/B-test different models or settings.
+
+영상 업스케일 품질 확인, 생성·가공 결과와 레퍼런스 영상 비교, 서로 다른 모델이나
+설정의 A/B 비교에 사용할 수 있습니다.
+
 <img src="docs/assets/video-comparer-workflow.png" width="1200" alt="Real ComfyUI workflow using Video Comparer">
 
 <p>
@@ -42,6 +48,13 @@ base/original; move the divider right to reveal more of video B.
 - Browser recording of the video, divider, handle, and labels.
 - Direct recording output to ComfyUI's core `Save Video` node.
 - No models or third-party Python packages required.
+
+### Common uses
+
+- Compare before and after video upscaling to inspect detail, sharpness, and artifacts.
+- Compare a generated or processed result against a reference video for motion,
+  composition, timing, and color.
+- A/B-test models and settings such as interpolation, denoising, or color grading.
 
 ### Requirements
 
@@ -159,6 +172,13 @@ A가 원본이며, 구분선을 오른쪽으로 움직일수록 비디오 B가 �
 - 영상, 구분선, 핸들과 라벨을 함께 브라우저에서 녹화.
 - 녹화 결과를 ComfyUI 코어 `Save Video`로 바로 전달.
 - 추가 모델과 외부 Python 패키지가 필요하지 않음.
+
+### 주요 사용 예
+
+- 영상 업스케일 전·후를 비교해 디테일, 선명도와 깨짐을 확인합니다.
+- 생성하거나 가공한 결과를 레퍼런스 영상과 비교해 움직임, 구도, 타이밍과 색감을
+  확인합니다.
+- 서로 다른 모델과 프레임 보간, 노이즈 제거, 색 보정 등의 설정을 A/B 비교합니다.
 
 ### 필요 환경
 
