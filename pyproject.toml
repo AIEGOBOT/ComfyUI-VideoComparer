@@ -1,7 +1,7 @@
 [project]
 name = "video-comparer"
-version = "0.1.0"
-description = "Synchronized in-node swipe comparison for two ComfyUI VIDEO inputs"
+version = "0.1.1"
+description = "Compare two ComfyUI videos with a synchronized swipe slider. Review upscaling, reference matching, and A/B results, then record the comparison to Save Video."
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []

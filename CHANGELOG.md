@@ -4,12 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.1.1 - 2026-08-18
+
 ### Added
 
 - A second real-world swipe recording and animated GIF previews in the README examples.
 
 ### Changed
 
+- Expanded the Registry description with the main comparison use cases and recording output.
 - Clarified the main use cases for upscaling, reference-video, and settings comparisons.
 
 ## 0.1.0 - 2026-08-18
