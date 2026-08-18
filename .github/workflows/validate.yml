@@ -91,9 +91,13 @@ jobs:
 
           demo = root / "docs" / "assets" / "video-comparer-demo.mp4"
           poster = root / "docs" / "assets" / "video-comparer-demo-poster.jpg"
+          real_world_demo = root / "docs" / "assets" / "video-comparer-real-world-demo.mp4"
+          real_world_poster = root / "docs" / "assets" / "video-comparer-real-world-demo-poster.jpg"
           workflow_screenshot = root / "docs" / "assets" / "video-comparer-workflow.png"
           assert demo.is_file() and 0 < demo.stat().st_size < 20 * 1024 * 1024
           assert poster.is_file() and poster.stat().st_size > 0
+          assert real_world_demo.is_file() and 0 < real_world_demo.stat().st_size < 20 * 1024 * 1024
+          assert real_world_poster.is_file() and real_world_poster.stat().st_size > 0
           assert workflow_screenshot.is_file() and 0 < workflow_screenshot.stat().st_size < 10 * 1024 * 1024
 
           def png_size(path):

@@ -17,11 +17,16 @@ ComfyUI 영상 두 개를 동기화된 스와이프로 비교하고, 조작 화�
 
 <img src="docs/assets/video-comparer-workflow.png" width="1200" alt="Real ComfyUI workflow using Video Comparer">
 
-<a href="docs/assets/video-comparer-demo.mp4">
-  <img src="docs/assets/video-comparer-demo-poster.jpg" width="420" alt="Video Comparer swipe recording example">
-</a>
+<p>
+  <a href="docs/assets/video-comparer-demo.mp4">
+    <img src="docs/assets/video-comparer-demo-poster.jpg" width="420" alt="Video Comparer character swipe example">
+  </a>
+  <a href="docs/assets/video-comparer-real-world-demo.mp4">
+    <img src="docs/assets/video-comparer-real-world-demo-poster.jpg" width="420" alt="Video Comparer real-world swipe example">
+  </a>
+</p>
 
-Click the preview to watch the real recording. / 미리보기를 누르면 실제 녹화 영상을 볼 수 있습니다.
+Click either preview to watch a real recording. / 미리보기를 누르면 실제 녹화 영상을 볼 수 있습니다.
 
 ## English
 
