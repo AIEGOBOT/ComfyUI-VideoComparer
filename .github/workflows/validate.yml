@@ -43,6 +43,8 @@ jobs:
           root = pathlib.Path(".")
           metadata = (root / "pyproject.toml").read_text(encoding="utf-8")
           assert 'name = "video-comparer"' in metadata
+          assert 'version = "0.1.1"' in metadata
+          assert 'description = "Compare two ComfyUI videos with a synchronized swipe slider.' in metadata
           assert 'license = { file = "LICENSE" }' in metadata
           assert 'PublisherId = "aiegobot"' in metadata
           assert 'assets/registry-icon.png' in metadata
