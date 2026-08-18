@@ -9,9 +9,21 @@ from comfy_api.v0_0_2 import ComfyExtension, Input, InputImpl, Types, io, ui
 from comfy_execution.graph_utils import ExecutionBlocker
 from server import PromptServer
 
+from .utils import prune_preview_files, safe_recording_path
+
 
 PREVIEW_SUBFOLDER = "video_comparer"
 RECORDING_SUBFOLDER = "video_comparer_recordings"
+MAX_PREVIEW_FILES = 12
+MAX_RECORDING_BYTES = 512 * 1024 * 1024
+MAX_RECORDING_SECONDS = 120
+MULTIPART_OVERHEAD_ALLOWANCE = 2 * 1024 * 1024
+
+
+class RecordingUploadError(ValueError):
+    def __init__(self, message: str, status: int = 400):
+        super().__init__(message)
+        self.status = status
 
 
 def _preview_target(run_id: str, side: str) -> tuple[str, str]:
@@ -30,15 +42,8 @@ def _recording_directory() -> str:
 
 
 def _recording_path(recording_file: str) -> str | None:
-    if not recording_file or os.path.basename(recording_file) != recording_file:
-        return None
-    if not recording_file.lower().endswith(".webm"):
-        return None
     directory = _recording_directory()
-    path = os.path.realpath(os.path.join(directory, recording_file))
-    if os.path.commonpath([directory, path]) != directory or not os.path.isfile(path):
-        return None
-    return path
+    return safe_recording_path(directory, recording_file)
 
 
 @PromptServer.instance.routes.post("/indi_video_comparer/recording")
@@ -46,6 +51,15 @@ async def upload_recording(request: web.Request) -> web.Response:
     if not (request.content_type or "").lower().startswith("multipart/"):
         return web.json_response(
             {"error": "multipart/form-data is required."}, status=415
+        )
+    if (
+        request.content_length is not None
+        and request.content_length
+        > MAX_RECORDING_BYTES + MULTIPART_OVERHEAD_ALLOWANCE
+    ):
+        return web.json_response(
+            {"error": "The recording exceeds the 512 MiB upload limit."},
+            status=413,
         )
 
     recording_file = f"video_comparison_{uuid.uuid4().hex}.webm"
@@ -66,6 +80,9 @@ async def upload_recording(request: web.Request) -> web.Response:
                     pass
                 continue
 
+            if found_recording:
+                raise RecordingUploadError("Only one recording field is allowed.")
+
             found_recording = True
             with open(part_path, "xb") as output:
                 while True:
@@ -74,19 +91,24 @@ async def upload_recording(request: web.Request) -> web.Response:
                         break
                     output.write(chunk)
                     total_bytes += len(chunk)
+                    if total_bytes > MAX_RECORDING_BYTES:
+                        raise RecordingUploadError(
+                            "The recording exceeds the 512 MiB upload limit.",
+                            status=413,
+                        )
 
         if not found_recording or total_bytes == 0:
-            raise ValueError("The recording upload was empty.")
+            raise RecordingUploadError("The recording upload was empty.")
         with open(part_path, "rb") as uploaded:
             if uploaded.read(4) != b"\x1a\x45\xdf\xa3":
-                raise ValueError("The recording is not a valid WebM file.")
+                raise RecordingUploadError("The recording is not a valid WebM file.")
         os.replace(part_path, final_path)
-    except ValueError as error:
+    except RecordingUploadError as error:
         try:
             os.remove(part_path)
         except FileNotFoundError:
             pass
-        return web.json_response({"error": str(error)}, status=400)
+        return web.json_response({"error": str(error)}, status=error.status)
     except BaseException:
         try:
             os.remove(part_path)
@@ -210,6 +232,16 @@ class IndiVideoComparer(io.ComfyNode):
                     pass
             raise
 
+        try:
+            prune_preview_files(
+                os.path.dirname(path_a),
+                keep_paths=(path_a, path_b),
+                max_files=MAX_PREVIEW_FILES,
+            )
+        except OSError:
+            # Preview retention is best-effort and must not fail a valid queue.
+            pass
+
         payload = {
             "video_a": ui.SavedResult(filename_a, PREVIEW_SUBFOLDER, io.FolderType.temp),
             "video_b": ui.SavedResult(filename_b, PREVIEW_SUBFOLDER, io.FolderType.temp),
@@ -227,6 +259,8 @@ class IndiVideoComparer(io.ComfyNode):
             "duration_a": duration_a,
             "duration_b": duration_b,
             "recording_file": recording_file,
+            "max_recording_bytes": MAX_RECORDING_BYTES,
+            "max_recording_seconds": MAX_RECORDING_SECONDS,
         }
         recording_path = _recording_path(recording_file)
         recorded_video = (

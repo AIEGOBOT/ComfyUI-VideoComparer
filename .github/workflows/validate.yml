@@ -10,19 +10,25 @@ permissions:
 jobs:
   static-checks:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Validate Python syntax
-        run: python -m py_compile __init__.py nodes.py
+        run: python -m py_compile __init__.py nodes.py utils.py tests/test_utils.py
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
 
       - name: Validate frontend JavaScript syntax
         run: node --check web/video_comparer_v7.js
@@ -38,12 +44,25 @@ jobs:
           assert 'name = "comfyui-video-comparer"' in metadata
           assert 'license = { file = "LICENSE" }' in metadata
 
-          workflow = json.loads(
-              (root / "example_workflows" / "video_comparer_smoke.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          node_types = {node["type"] for node in workflow["nodes"]}
-          assert {"IndiVideoComparer", "SaveVideo"} <= node_types
+          workflows = [
+              root / "example_workflows" / "video_comparer_smoke.json",
+              root / "example_workflows" / "video_comparer_load_and_record.json",
+          ]
+          for path in workflows:
+              text = path.read_text(encoding="utf-8")
+              assert "D:\\" not in text and "C:\\" not in text and "/home/" not in text
+              workflow = json.loads(text)
+              node_types = {node["type"] for node in workflow["nodes"]}
+              assert {"IndiVideoComparer", "SaveVideo"} <= node_types
+
+          readme = (root / "README.md").read_text(encoding="utf-8")
+          assert "## English" in readme and "## 한국어" in readme
+
+          demo = root / "docs" / "assets" / "video-comparer-demo.mp4"
+          poster = root / "docs" / "assets" / "video-comparer-demo-poster.jpg"
+          workflow_screenshot = root / "docs" / "assets" / "video-comparer-workflow.png"
+          assert demo.is_file() and 0 < demo.stat().st_size < 20 * 1024 * 1024
+          assert poster.is_file() and poster.stat().st_size > 0
+          assert workflow_screenshot.is_file() and 0 < workflow_screenshot.stat().st_size < 10 * 1024 * 1024
           print("metadata-and-workflow-ok")
           PY
