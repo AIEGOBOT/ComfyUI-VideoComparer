@@ -19,7 +19,7 @@ This node does not download models and has no third-party Python dependencies.
 
 ### Option A: ComfyUI Manager
 
-Use this method after `video-comparer` is available in the Comfy Registry.
+Use this method to install the stable `video-comparer` package from the Comfy Registry.
 
 1. Open ComfyUI.
 2. Open **Manager** → **Custom Nodes**.
@@ -113,7 +113,7 @@ are not removed automatically.
 
 ### 방법 A: ComfyUI Manager
 
-`video-comparer`가 Comfy Registry에 공개된 뒤 사용하는 권장 방법입니다.
+Comfy Registry의 안정 `video-comparer` 패키지를 설치하는 권장 방법입니다.
 
 1. ComfyUI를 엽니다.
 2. **Manager** → **Custom Nodes**를 엽니다.

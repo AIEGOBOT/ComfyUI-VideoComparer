@@ -49,7 +49,7 @@ Tested with ComfyUI `0.33.1`, frontend `1.48.7`, and Python `3.12.10`.
 
 #### ComfyUI Manager — recommended
 
-After the stable package is available in the Comfy Registry:
+Install the stable package from the Comfy Registry:
 
 1. Open **Manager** → **Custom Nodes**.
 2. Search the **Node Pack** list for `video-comparer` or `ComfyUI Video Comparer`.
@@ -166,7 +166,7 @@ ComfyUI `0.33.1`, 프론트엔드 `1.48.7`, Python `3.12.10`에서 확인했습�
 
 #### ComfyUI Manager — 권장
 
-안정 버전이 Comfy Registry에 공개된 뒤에는 다음 순서로 설치합니다.
+Comfy Registry의 안정 버전은 다음 순서로 설치합니다.
 
 1. **Manager** → **Custom Nodes**를 엽니다.
 2. **Node Pack** 목록에서 `video-comparer` 또는 `ComfyUI Video Comparer`를 검색합니다.
