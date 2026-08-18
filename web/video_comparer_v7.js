@@ -2,6 +2,8 @@ import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
 const NODE_ID = "IndiVideoComparer";
+const DEFAULT_MAX_RECORDING_BYTES = 512 * 1024 * 1024;
+const DEFAULT_MAX_RECORDING_SECONDS = 120;
 
 function fileToUrl(file) {
   if (!file) return "";
@@ -174,7 +176,7 @@ function installComparer(node) {
   const playButton = makeButton("▶", "Play / pause both videos");
   const recordButton = makeButton(
     "⏺ REC",
-    "Record the live swipe and send it through recorded_video to a connected Save Video node",
+    "Record up to 2 minutes and send it through recorded_video to a connected Save Video node",
   );
   recordButton.style.minWidth = "62px";
   recordButton.style.color = "#ff7b7b";
@@ -215,8 +217,13 @@ function installComparer(node) {
     recordingCanvas: null,
     recordingStream: null,
     recordingChunks: [],
+    recordingBytes: 0,
+    recordingLimitMessage: "",
+    recordingTimer: null,
     recordingStartedAt: 0,
     publishRecording: true,
+    maxRecordingBytes: DEFAULT_MAX_RECORDING_BYTES,
+    maxRecordingSeconds: DEFAULT_MAX_RECORDING_SECONDS,
     lastLayoutWidth: 0,
     resizeObserver: null,
   };
@@ -374,6 +381,10 @@ function installComparer(node) {
   }
 
   function releaseRecordingStream() {
+    if (state.recordingTimer !== null) {
+      window.clearTimeout(state.recordingTimer);
+      state.recordingTimer = null;
+    }
     state.recordingStream?.getTracks().forEach((track) => track.stop());
     state.recordingStream = null;
     state.recordingCanvas = null;
@@ -494,25 +505,41 @@ function installComparer(node) {
       Math.min(30_000_000, canvas.width * canvas.height * 4),
     );
     const options = mimeType ? { mimeType, videoBitsPerSecond } : { videoBitsPerSecond };
+    state.recordingStream = stream;
     const recorder = new MediaRecorder(stream, options);
 
-    state.recordingStream = stream;
     state.recordingChunks = [];
+    state.recordingBytes = 0;
+    state.recordingLimitMessage = "";
     state.publishRecording = true;
     state.recorder = recorder;
     recorder.addEventListener("dataavailable", (event) => {
-      if (event.data?.size) state.recordingChunks.push(event.data);
+      if (!event.data?.size || !state.publishRecording) return;
+      const nextBytes = state.recordingBytes + event.data.size;
+      if (nextBytes > state.maxRecordingBytes) {
+        state.publishRecording = false;
+        state.recordingChunks = [];
+        state.recordingLimitMessage = "Recording stopped because it exceeded the 512 MiB limit.";
+        if (recorder.state !== "inactive") recorder.stop();
+        return;
+      }
+      state.recordingBytes = nextBytes;
+      state.recordingChunks.push(event.data);
     });
     recorder.addEventListener("stop", async () => {
       const chunks = state.recordingChunks;
       const shouldPublish = state.publishRecording;
+      const limitMessage = state.recordingLimitMessage;
       const recordingType = recorder.mimeType || mimeType || "video/webm";
       state.recorder = null;
       state.recordingChunks = [];
+      state.recordingBytes = 0;
+      state.recordingLimitMessage = "";
       releaseRecordingStream();
 
       if (!shouldPublish || !chunks.length) {
         resetRecordButton();
+        if (limitMessage) showRecordingMessage(limitMessage);
         return;
       }
       const blob = new Blob(chunks, { type: recordingType });
@@ -539,6 +566,12 @@ function installComparer(node) {
 
     recorder.start(250);
     state.recordingStartedAt = performance.now();
+    state.recordingTimer = window.setTimeout(() => {
+      if (state.recorder?.state === "recording") {
+        showRecordingMessage("The 2-minute recording limit was reached. Preparing the recording…");
+        stopRecording(true);
+      }
+    }, state.maxRecordingSeconds * 1000);
     recordButton.style.color = "#fff";
     recordButton.setAttribute("aria-pressed", "true");
   }
@@ -655,6 +688,14 @@ function installComparer(node) {
     state.loop = payload.loop !== false;
     state.muted = payload.muted !== false;
     state.syncTolerance = Math.max(0.01, Number(payload.sync_tolerance_ms || 80) / 1000);
+    state.maxRecordingBytes = Math.max(
+      1024 * 1024,
+      Number(payload.max_recording_bytes) || DEFAULT_MAX_RECORDING_BYTES,
+    );
+    state.maxRecordingSeconds = Math.max(
+      10,
+      Number(payload.max_recording_seconds) || DEFAULT_MAX_RECORDING_SECONDS,
+    );
     setSplit(payload.initial_split ?? 0.5);
     updateMuteButton();
 

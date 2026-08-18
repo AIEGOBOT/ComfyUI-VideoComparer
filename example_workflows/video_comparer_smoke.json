@@ -117,7 +117,7 @@
   "definitions": {"subgraphs": []},
   "config": {},
   "extra": {
-    "frontendVersion": "1.47.11",
+    "frontendVersion": "1.48.7",
     "ds": {"scale": 0.9, "offset": [20, 20]}
   },
   "version": 0.4
