@@ -12,7 +12,6 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer"
 Issues = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer/issues"
-Documentation = "https://github.com/AIEGOBOT/ComfyUI-VideoComparer/blob/main/docs/IndiVideoComparer.md"
 
 [tool.comfy]
 PublisherId = "aiegobot"

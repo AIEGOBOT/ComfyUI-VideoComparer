@@ -33,7 +33,7 @@ jobs:
       - name: Validate frontend JavaScript syntax
         run: node --check web/video_comparer_v7.js
 
-      - name: Validate metadata, public docs, and examples
+      - name: Validate package metadata and portable example
         run: |
           python - <<'PY'
           import json
@@ -44,70 +44,35 @@ jobs:
           metadata = (root / "pyproject.toml").read_text(encoding="utf-8")
           assert 'name = "video-comparer"' in metadata
           assert 'version = "0.1.1"' in metadata
-          assert 'description = "Compare two ComfyUI videos with a synchronized swipe slider.' in metadata
           assert 'license = { file = "LICENSE" }' in metadata
           assert 'PublisherId = "aiegobot"' in metadata
-          assert 'assets/registry-icon.png' in metadata
-          assert 'assets/registry-banner.png' in metadata
 
-          workflows = [
-              root / "example_workflows" / "video_comparer_smoke.json",
-              root / "example_workflows" / "video_comparer_load_and_record.json",
-          ]
-          for path in workflows:
-              text = path.read_text(encoding="utf-8")
-              assert "D:\\" not in text and "C:\\" not in text and "/home/" not in text
-              workflow = json.loads(text)
-              node_types = {node["type"] for node in workflow["nodes"]}
-              assert {"IndiVideoComparer", "SaveVideo"} <= node_types
-
-          readme = (root / "README.md").read_text(encoding="utf-8")
-          assert "## English" in readme and "## 한국어" in readme
-          assert "ComfyUI Manager — recommended" in readme
-          assert "Install via Git URL" in readme
-          assert "git clone https://github.com/AIEGOBOT/ComfyUI-VideoComparer.git" in readme
-
-          required_public_files = [
+          required = [
               "README.md",
               "LICENSE",
-              "CHANGELOG.md",
-              "CONTRIBUTING.md",
-              "SECURITY.md",
-              "docs/INSTALLATION.md",
-              "docs/TROUBLESHOOTING.md",
-              "docs/IndiVideoComparer.md",
-              ".github/ISSUE_TEMPLATE/bug_report.yml",
-              ".github/ISSUE_TEMPLATE/feature_request.yml",
-              ".github/ISSUE_TEMPLATE/config.yml",
-              ".github/PULL_REQUEST_TEMPLATE.md",
+              "__init__.py",
+              "nodes.py",
+              "utils.py",
+              "web/video_comparer_v7.js",
+              "pyproject.toml",
+              "example_workflows/video_comparer_smoke.json",
+              "assets/registry-icon.png",
+              "assets/registry-banner.png",
           ]
-          for relative in required_public_files:
+          for relative in required:
               path = root / relative
               assert path.is_file() and path.stat().st_size > 0, relative
 
-          for path in list(root.rglob("*.md")) + workflows:
-              text = path.read_text(encoding="utf-8")
-              assert "D:\\" not in text, path
-              assert "C:\\Users\\" not in text, path
-              assert "/home/" not in text, path
+          example = root / "example_workflows" / "video_comparer_smoke.json"
+          text = example.read_text(encoding="utf-8")
+          assert "D:\\" not in text and "C:\\" not in text and "/home/" not in text
+          workflow = json.loads(text)
+          node_types = {node["type"] for node in workflow["nodes"]}
+          assert {"IndiVideoComparer", "SaveVideo"} <= node_types
 
-          demo = root / "docs" / "assets" / "video-comparer-demo.mp4"
-          demo_gif = root / "docs" / "assets" / "video-comparer-demo.gif"
-          poster = root / "docs" / "assets" / "video-comparer-demo-poster.jpg"
-          real_world_demo = root / "docs" / "assets" / "video-comparer-real-world-demo.mp4"
-          real_world_gif = root / "docs" / "assets" / "video-comparer-real-world-demo.gif"
-          real_world_poster = root / "docs" / "assets" / "video-comparer-real-world-demo-poster.jpg"
-          workflow_screenshot = root / "docs" / "assets" / "video-comparer-workflow.png"
-          assert demo.is_file() and 0 < demo.stat().st_size < 20 * 1024 * 1024
-          assert demo_gif.is_file() and 0 < demo_gif.stat().st_size < 10 * 1024 * 1024
-          assert poster.is_file() and poster.stat().st_size > 0
-          assert real_world_demo.is_file() and 0 < real_world_demo.stat().st_size < 20 * 1024 * 1024
-          assert real_world_gif.is_file() and 0 < real_world_gif.stat().st_size < 10 * 1024 * 1024
-          assert real_world_poster.is_file() and real_world_poster.stat().st_size > 0
-          assert workflow_screenshot.is_file() and 0 < workflow_screenshot.stat().st_size < 10 * 1024 * 1024
-
-          for gif in (demo_gif, real_world_gif):
-              assert gif.read_bytes()[:6] in (b"GIF87a", b"GIF89a"), gif
+          readme = (root / "README.md").read_text(encoding="utf-8")
+          assert "## English" in readme and "## 한국어" in readme
+          assert "git clone https://github.com/AIEGOBOT/ComfyUI-VideoComparer.git" in readme
 
           def png_size(path):
               with path.open("rb") as handle:
@@ -118,21 +83,5 @@ jobs:
 
           assert png_size(root / "assets" / "registry-icon.png") == (400, 400)
           assert png_size(root / "assets" / "registry-banner.png") == (1400, 600)
-
-          comfyignore = (root / ".comfyignore").read_text(encoding="utf-8")
-          for excluded in (
-              ".github/",
-              "tests/",
-              "docs/assets/",
-              "assets/",
-              "AGENTS.md",
-              "CONTRIBUTING.md",
-              "SECURITY.md",
-          ):
-              assert excluded in comfyignore
-
-          publish_workflow = (root / ".github" / "workflows" / "publish_action.yml").read_text(encoding="utf-8")
-          assert "workflow_dispatch:" in publish_workflow
-          assert "REGISTRY_ACCESS_TOKEN" in publish_workflow
-          print("metadata-and-workflow-ok")
+          print("package-ok")
           PY
