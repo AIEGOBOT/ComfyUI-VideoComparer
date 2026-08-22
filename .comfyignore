@@ -5,6 +5,9 @@ tests/
 # Registry artwork is referenced through raw GitHub URLs
 assets/
 
+# GitHub demo media explains the node but is not needed at runtime
+docs/assets/
+
 # Local caches and bytecode
 __pycache__/
 *.py[cod]

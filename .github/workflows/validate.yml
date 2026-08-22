@@ -60,6 +60,13 @@ jobs:
               "example_workflows/video_comparer_load_and_record.json",
               "assets/registry-icon.png",
               "assets/registry-banner.png",
+              "docs/assets/video-comparer-workflow.png",
+              "docs/assets/video-comparer-demo.mp4",
+              "docs/assets/video-comparer-demo.gif",
+              "docs/assets/video-comparer-demo-poster.jpg",
+              "docs/assets/video-comparer-real-world-demo.mp4",
+              "docs/assets/video-comparer-real-world-demo.gif",
+              "docs/assets/video-comparer-real-world-demo-poster.jpg",
           ]
           for relative in required:
               path = root / relative
@@ -79,6 +86,14 @@ jobs:
           readme = (root / "README.md").read_text(encoding="utf-8")
           assert "## English" in readme and "## 한국어" in readme
           assert "git clone https://github.com/AIEGOBOT/ComfyUI-VideoComparer.git" in readme
+          assert "docs/assets/video-comparer-workflow.png" in readme
+          assert "docs/assets/video-comparer-demo.gif" in readme
+          assert "docs/assets/video-comparer-demo.mp4" in readme
+          assert "docs/assets/video-comparer-real-world-demo.gif" in readme
+          assert "docs/assets/video-comparer-real-world-demo.mp4" in readme
+
+          comfyignore = (root / ".comfyignore").read_text(encoding="utf-8")
+          assert "docs/assets/" in comfyignore
 
           def png_size(path):
               with path.open("rb") as handle:
@@ -89,5 +104,24 @@ jobs:
 
           assert png_size(root / "assets" / "registry-icon.png") == (400, 400)
           assert png_size(root / "assets" / "registry-banner.png") == (1400, 600)
+          workflow_screenshot = root / "docs" / "assets" / "video-comparer-workflow.png"
+          assert png_size(workflow_screenshot)[0] > 0
+          assert workflow_screenshot.stat().st_size < 10 * 1024 * 1024
+
+          for filename in [
+              "video-comparer-demo.gif",
+              "video-comparer-real-world-demo.gif",
+          ]:
+              path = root / "docs" / "assets" / filename
+              assert path.stat().st_size < 10 * 1024 * 1024
+              assert path.read_bytes()[:6] in (b"GIF87a", b"GIF89a")
+
+          for filename in [
+              "video-comparer-demo.mp4",
+              "video-comparer-real-world-demo.mp4",
+          ]:
+              path = root / "docs" / "assets" / filename
+              assert path.stat().st_size < 20 * 1024 * 1024
+              assert path.read_bytes()[4:8] == b"ftyp"
           print("package-ok")
           PY

@@ -13,6 +13,21 @@ record the comparison and send it to the core `Save Video` node.
 ComfyUI 코어 `VIDEO` 두 개를 동기화된 스와이프로 비교하고, 비교 장면을 녹화해
 코어 `Save Video` 노드로 전달합니다.
 
+<img src="docs/assets/video-comparer-workflow.png" width="1200" alt="Real ComfyUI workflow using Video Comparer">
+
+<p>
+  <a href="docs/assets/video-comparer-demo.mp4">
+    <img src="docs/assets/video-comparer-demo.gif" width="420" alt="Animated Video Comparer character swipe example">
+  </a>
+  <a href="docs/assets/video-comparer-real-world-demo.mp4">
+    <img src="docs/assets/video-comparer-real-world-demo.gif" width="420" alt="Animated Video Comparer real-world swipe example">
+  </a>
+</p>
+
+GIF previews play automatically; click one to open the MP4 with audio.
+
+GIF는 자동 재생되며, 누르면 소리가 포함된 MP4를 볼 수 있습니다.
+
 ## English
 
 ### Features
