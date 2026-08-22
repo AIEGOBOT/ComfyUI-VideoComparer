@@ -55,7 +55,9 @@ jobs:
               "utils.py",
               "web/video_comparer_v7.js",
               "pyproject.toml",
+              "example_workflows/README.md",
               "example_workflows/video_comparer_smoke.json",
+              "example_workflows/video_comparer_load_and_record.json",
               "assets/registry-icon.png",
               "assets/registry-banner.png",
           ]
@@ -63,12 +65,16 @@ jobs:
               path = root / relative
               assert path.is_file() and path.stat().st_size > 0, relative
 
-          example = root / "example_workflows" / "video_comparer_smoke.json"
-          text = example.read_text(encoding="utf-8")
-          assert "D:\\" not in text and "C:\\" not in text and "/home/" not in text
-          workflow = json.loads(text)
-          node_types = {node["type"] for node in workflow["nodes"]}
-          assert {"IndiVideoComparer", "SaveVideo"} <= node_types
+          examples = [
+              root / "example_workflows" / "video_comparer_smoke.json",
+              root / "example_workflows" / "video_comparer_load_and_record.json",
+          ]
+          for example in examples:
+              text = example.read_text(encoding="utf-8")
+              assert "D:\\" not in text and "C:\\" not in text and "/home/" not in text
+              workflow = json.loads(text)
+              node_types = {node["type"] for node in workflow["nodes"]}
+              assert {"IndiVideoComparer", "SaveVideo"} <= node_types
 
           readme = (root / "README.md").read_text(encoding="utf-8")
           assert "## English" in readme and "## 한국어" in readme

@@ -52,8 +52,13 @@ The shared duration is the shorter input duration. Recording is limited to 2
 minutes and 512 MiB. Before a recording exists, `recorded_video` intentionally
 blocks execution so the first preview queue cannot save a source video.
 
-For a model-free smoke test, open
-[`example_workflows/video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json).
+### Example workflows
+
+- [`video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json):
+  model-free red/blue compatibility test.
+- [`video_comparer_load_and_record.json`](example_workflows/video_comparer_load_and_record.json):
+  practical load, compare, record, and save layout.
+- [Example workflow guide](example_workflows/README.md)
 
 ### Inputs, output, and storage
 
@@ -109,9 +114,13 @@ ComfyUI를 재시작하고 브라우저를 새로고침합니다. 추가 Python 
 비교 길이는 더 짧은 입력에 맞춰지며 녹화는 최대 2분, 512MiB입니다. 녹화물이
 생기기 전에는 첫 미리보기 큐가 원본을 저장하지 않도록 출력 실행을 차단합니다.
 
-모델과 입력 파일이 필요 없는 테스트는
-[`example_workflows/video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json)을
-사용합니다.
+### 예제 워크플로우
+
+- [`video_comparer_smoke.json`](example_workflows/video_comparer_smoke.json):
+  모델과 입력 파일이 필요 없는 빨강·파랑 호환성 테스트.
+- [`video_comparer_load_and_record.json`](example_workflows/video_comparer_load_and_record.json):
+  영상 불러오기, 비교, 녹화와 저장을 포함한 실사용 구성.
+- [예제 워크플로우 안내](example_workflows/README.md)
 
 완성된 WebM은 사용자가 삭제할 때까지
 `ComfyUI/input/video_comparer_recordings`에 남습니다. 영상은 로컬 ComfyUI 서버와
